@@ -4,9 +4,10 @@
   "description": "Parte de backend proyecto",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon backend/server.js",
     "start": "node backend/server.js",
-    "cient": "npm start --prefix frontend",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seederScript.js"
   },
   "repository": {
@@ -23,7 +24,10 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "mongoose": "^6.3.0",
+    "mongoose": "^6.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.1.0",
     "nodemon": "^2.0.15"
   }
 }
