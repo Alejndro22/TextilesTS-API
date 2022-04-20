@@ -4,7 +4,11 @@ import './HomeScreen.css'
 const HomeScreen = () => {
   return (
     <div className='homescreen'>
-      HomeScreen
+      <h2 className='homescreen__tittle'>Productos Disponibles</h2>
+      
+      <div className='homescreen__products'>
+        
+      </div>
     </div>
   )
 }
