@@ -20,7 +20,33 @@ const productoPorId = async (req, res) => {
   }
 };
 
+const actualizarProducto = async (req, res) => {
+  const { id } = req.params;
+  const producto = await Inventario.findById(id);
+
+  if (!producto) {
+    const error = new Error("Producto No Encontrado");
+    return res.status(404).json({ msg: error.message });
+  }
+
+  var newExistencias = producto.existencias - req.body.existencias;
+  // if (newExistencias < 0) {
+  //   const error = new Error("No pueden quedar existencias negativas");
+  //   return res.status(404).json({ msg: error.message });
+  // }
+
+  producto.existencias = newExistencias;
+
+  try {
+    const productoActualizado = await producto.save();
+    res.json(productoActualizado);
+  } catch (error) {
+    return res.status(503).json({ msg: error.message });
+  }
+};
+
 module.exports = {
   todosLosProductos,
   productoPorId,
+  actualizarProducto,
 };
