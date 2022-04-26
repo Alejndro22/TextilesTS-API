@@ -1,12 +1,12 @@
-import React from 'react';
-import './CartScreen.css';
-import CartItem from '../components/CartItem';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from "react";
+import "./CartScreen.css";
+import CartItem from "../components/CartItem";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 //import { addListener } from '../../../backend/models/Inventario';
 
 //Actions
-import {addToCart, removeFromCart} from '../redux/actions/cartActions';
+import { addToCart, removeFromCart } from "../redux/actions/cartActions";
 
 const CartScreen = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const CartScreen = () => {
   const { cartItems } = cart;
 
   const qtyChangeHandler = (id, qty) => {
-    dispatch(addToCart(id, qty))
+    dispatch(addToCart(id, qty));
   };
 
   const removeHandler = (id) => {
@@ -27,25 +27,34 @@ const CartScreen = () => {
   };
 
   const getCartSubTotal = () => {
-    return cartItems.reduce((precio, item) => (item.precio*item.qty) + precio, 0);
-  }
+    return cartItems.reduce(
+      (precio, item) => item.precio * item.qty + precio,
+      0
+    );
+  };
 
   return (
-    <div className='cartscreen'>
-
-      <div className='cartscreen__left'>
+    <div className="cartscreen">
+      <div className="cartscreen__left">
         <h2>Carro de compras</h2>
         {cartItems.length === 0 ? (
           <div>
             Su carrito esta vacio <Link to="/">Regresar</Link>
           </div>
         ) : (
-          cartItems.map((item) => <CartItem item={item} qtyChangeHandler={qtyChangeHandler} removeHandler={removeHandler}/>)
+          cartItems.map((item) => (
+            <CartItem
+              key={item.producto}
+              item={item}
+              qtyChangeHandler={qtyChangeHandler}
+              removeHandler={removeHandler}
+            />
+          ))
         )}
       </div>
 
-      <div className='cartscreen__right'>
-        <div className='cartscreen__info'>
+      <div className="cartscreen__right">
+        <div className="cartscreen__info">
           <p>SubTotal ({getCartCount()}) items</p>
           <p>Q{getCartSubTotal().toFixed(2)}</p>
         </div>
@@ -54,7 +63,7 @@ const CartScreen = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CartScreen
+export default CartScreen;
