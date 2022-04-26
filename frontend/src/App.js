@@ -1,16 +1,16 @@
 import React from "react";
 import { useState } from "react";
-import "./App.css"
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import HomeScreen from './screens/HomeScreen'
-import ProductScreen from './screens/ProductScreen'
-import CartScreen from './screens/CartScreen'
+import "./App.css";
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import HomeScreen from './screens/HomeScreen';
+import ProductScreen from './screens/ProductScreen';
+import CartScreen from './screens/CartScreen';
 import NavBar from "./components/NavBar";
 import Backdrop from "./components/Backdrop";
 import SideDrawe from "./components/SideDrawe";
   
 function App() {
-  const [sideToggle, setSideToggle] = useState(false)
+  const [sideToggle, setSideToggle] = useState(false);
 
 
   return (

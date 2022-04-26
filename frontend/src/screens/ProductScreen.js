@@ -1,52 +1,85 @@
 import React from 'react'
 import './ProductScreen.css'
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-function ProductScreen() {
+//Actions
+import { getInventarioDetails } from '../redux/actions/inventarioActions';
+import { addToCart } from '../redux/actions/cartActions';
+import { useParams, useNavigate } from 'react-router-dom';
+
+const ProductScreen = () => {
+
+  const { id } = useParams();
+  let navigate = useNavigate();
+
+  const [qty, setQty] = useState(1);
+  const dispatch = useDispatch();
+
+
+  const inventarioDetails = useSelector(state => state.getInventarioDetails);
+  const { loading, error, inventario } = inventarioDetails;
+
+  useEffect(() => {
+
+    if (inventario && id !== inventario._id) {
+      dispatch(getInventarioDetails(id))
+    }
+  }, [dispatch, inventario]);
+
+  const addToCartHandler = () => {
+    dispatch(addToCart(inventario._id, qty));
+    navigate("/cart");
+  }
+
   return (
     <div className='productscreen'>
+      {loading ? <h2>Cargando...</h2> : error ? <h2>{error}</h2> : (
+        <>
+          <div className='productscreen__left'>
 
-      <div className='productscreen__left'>
+            <div className='left__image'>
+              <img src={inventario.urlImagen}
+                alt={inventario.nombre}></img>
+            </div>
 
-        <div className='left__image'>
-          <img src='https://images.unsplash.com/photo-1622914050511-9227d8533bf5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80' 
-          alt='product name'></img>
-        </div>
-        
-        <div className='left__info'>
-          <p className='left__name'>Producto 1</p>
-          <p>Q.455.00</p>
-          <p>Esta es una descripcion del prodcuto...</p>
-        </div>
+            <div className='left__info'>
+              <p className='left__name'>{inventario.nombre}</p>
+              <p>Precio: Q{inventario.precio}</p>
+              <p>{inventario.descripcion}</p>
+            </div>
 
-      </div>
+          </div>
 
-      <div className='productscreen__rigth'>
+          <div className='productscreen__rigth'>
 
-        <div className='right__info'>
-          <p>
-            Pricio: <span>Q.455.00</span>
-          </p>
+            <div className='right__info'>
+              <p>
+                Precio: <span>Q{inventario.precio}</span>
+              </p>
 
-          <p>
-            Estado: <span>Stock</span>
-          </p>
+              <p>
+                Estado: <span>{inventario.existencias > 0 ? "En stock" : "Agotado"}</span>
+              </p>
 
-          <p>
-            Qty
-            <select>
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-            </select>
-          </p>
+              <p>
+                Qty
+                <select value={qty} onChange={(e) => setQty(e.target.value)}>
+                  {[...Array(inventario.existencias).keys()].map((x) => (
+                    <option key={x+1} value={x+1}>{x+1}</option>
+                  ))}
+                </select>
+              </p>
 
-          <p>
-            <button type='button'>Agregar a carrito</button>
-          </p>
+              <p>
+                <button type='button' onClick={addToCartHandler}>Agregar a carrito</button>
+              </p>
 
-        </div>
-      </div>
+            </div>
+          </div>
+        </>
+      )}
+
     </div>
   )
 }
